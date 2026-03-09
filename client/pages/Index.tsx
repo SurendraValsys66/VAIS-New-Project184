@@ -1,147 +1,60 @@
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import EnhancedStatsCards from "@/components/dashboard/EnhancedStatsCards";
-import ImprovedAnalyticsCharts from "@/components/dashboard/ImprovedAnalyticsCharts";
-import InteractiveAnalyticsChart from "@/components/dashboard/InteractiveAnalyticsChart";
-import DynamicAnalyticsChart from "@/components/dashboard/DynamicAnalyticsChart";
-import DetailedOverview from "@/components/dashboard/DetailedOverview";
-import PerformanceAnalytics from "@/components/dashboard/PerformanceAnalytics";
-import DateRangePicker from "@/components/dashboard/DateRangePicker";
-import React, { useEffect, useMemo, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { BuilderCanvas } from "@/components/builder/Canvas";
 
 export default function Index() {
-  const [dateRange, setDateRange] = useState({
-    label: "Last 30 days",
-    value: "30d",
-    days: 30,
-  });
-
-  // Static data for dashboard metrics
-  const data = {
-    accountsVerified: 1234,
-    availableCredits: 15048,
-    creditsSpent: 8129,
-    lalsGenerated: 847,
-  };
-
-  const trends = {
-    accountsVerified: [{ value: 1200, changePercent: 2.8 }],
-    availableCredits: [{ value: 15000, changePercent: 0.3 }],
-    creditsSpent: [{ value: 7800, changePercent: 4.2 }],
-    lalsGenerated: [{ value: 820, changePercent: 3.3 }],
-  };
-
-  const isEmptyData = useMemo(() => {
-    const values = Object.values(data);
-    return values.every((v) => typeof v === "number" && v === 0);
-  }, [data]);
-
-  useEffect(() => {
-    const seen =
-      localStorage.getItem("valasys-getting-started-seen") === "true";
-    if (!seen || isEmptyData) {
-      window.dispatchEvent(new Event("open-getting-started"));
-    }
-  }, [isEmptyData]);
-
-  const handleDateRangeChange = (range: any) => {
-    setDateRange(range);
-    console.log("Date range changed to:", range);
-  };
-
   return (
-    <DashboardLayout>
-      <div className="space-y-8">
-        {/* Page Header */}
-        <div className="page-header">
-          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between space-y-4 lg:space-y-0 mb-6">
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-valasys-gray-900">
-                Welcome John Smith!
-              </h1>
-              <p className="text-valasys-gray-600">
-                Monitor your campaigns, track performance metrics, and discover
-                new opportunities with real-time insights.
-              </p>
+    <DndProvider backend={HTML5Backend}>
+      <div className="min-h-screen bg-gray-50 antialiased overflow-hidden">
+        <header className="h-16 border-b bg-white px-6 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-lg transform -rotate-3">
+              V
             </div>
-            <div className="flex items-center">
-              <DateRangePicker
-                onRangeChange={handleDateRangeChange}
-                defaultRange={dateRange.value}
-              />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-gray-900 leading-tight">
+                VALASYS <span className="text-blue-600 font-black">AI</span>
+              </span>
+              <span className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold">
+                Builder Pro
+              </span>
             </div>
           </div>
-        </div>
-
-        {/* Enhanced Stats Cards with Real-time Data */}
-        <div data-tour="stats-cards">
-          <EnhancedStatsCards data={data} trends={trends} />
-        </div>
-
-        {/* Interactive SaaS Analytics Chart */}
-        <div data-tour="analytics-charts">
-          <InteractiveAnalyticsChart showEmptyOverlay />
-        </div>
-
-        {/* Performance Analytics */}
-        <div data-tour="performance-analytics">
-          <PerformanceAnalytics />
-        </div>
-
-        {/* Dynamic Distribution Analytics Charts */}
-        <div data-tour="distribution-analysis">
-          <DynamicAnalyticsChart />
-        </div>
-
-        {/* Detailed Overview */}
-        <div data-tour="detailed-overview">
-          <DetailedOverview showEmptyOverlay />
-        </div>
-
-        {/* Additional Insights */}
-        <div data-tour="additional-insights">
-          <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-            <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">
-                    {((data.accountsVerified / 1500) * 100).toFixed(1)}%
+          <div className="flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-6">
+              {["Templates", "History", "Insights", "Settings"].map((item) => (
+                <button
+                  key={item}
+                  className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-all hover:-translate-y-0.5"
+                >
+                  {item}
+                </button>
+              ))}
+            </nav>
+            <div className="h-8 w-px bg-gray-200" />
+            <div className="flex items-center gap-4">
+              <div className="flex -space-x-2.5">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-bold overflow-hidden shadow-sm"
+                  >
+                    <img src={`https://i.pravatar.cc/150?u=${i + 10}`} alt="Avatar" />
                   </div>
-                  <div className="text-sm text-valasys-gray-600">
-                    Monthly Target Achievement
-                  </div>
-                </div>
-
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">
-                    {(
-                      (data.creditsSpent / data.availableCredits) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </div>
-                  <div className="text-sm text-valasys-gray-600">
-                    Credit Utilization Rate
-                  </div>
-                </div>
-
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 mb-2">
-                    {data.lalsGenerated >= 950
-                      ? "🎯"
-                      : data.lalsGenerated >= 800
-                        ? "📈"
-                        : "⚠️"}
-                  </div>
-                  <div className="text-sm text-valasys-gray-600">
-                    LALs Generation Status
-                  </div>
-                </div>
+                ))}
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <button className="text-sm font-semibold px-5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-md hover:shadow-lg active:scale-95">
+                Publish
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main className="builder-main">
+          <BuilderCanvas />
+        </main>
       </div>
-    </DashboardLayout>
+    </DndProvider>
   );
 }

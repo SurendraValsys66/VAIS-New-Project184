@@ -3,6 +3,11 @@ import type { Config } from "tailwindcss";
 export default {
   darkMode: ["class"],
   content: ["./client/**/*.{ts,tsx}"],
+  safelist: [
+    {
+      pattern: /col-span-(1|2|3|4|5|6|7|8|9|10|11|12)/,
+    },
+  ],
   prefix: "",
   theme: {
     container: {
